@@ -1,0 +1,52 @@
+set ratios 1:2:3
+set previewer ~/.config/lf/preview
+set cleaner ~/.config/lf/cleaner
+set hidden true
+set ignorecase true
+set icons true
+
+cmd wal ${{
+wal -i $f -q
+echo 'awesome.restart()' | awesome-client
+}}
+
+cmd mkdir ${{
+  printf "Directory Name: "
+  read ans
+  mkdir $ans
+}}
+
+cmd mkfile ${{
+  printf "File Name: "
+  read ans
+  $EDITOR $ans
+}}
+
+cmd restore_trash ${{
+  trash-restore
+}}
+
+cmd trash ${{
+  files=$(printf "$fx" | tr '\n' ';')
+  while [ "$files" ]; do
+    file=${files%%;*}
+
+    trash-put "$(basename "$file")"
+    if [ "$files" = "$file" ]; then
+      files=''
+    else
+      files="${files#*;}"
+    fi
+  done
+}}
+
+map . set hidden!
+map DD delete
+map <enter> open
+map R reload
+map mf mkfile
+map md mkdir
+map gd cd ~/documents
+map gD cd ~/downloads
+map gp cd ~/pictures
+map gc cd ~/.config
